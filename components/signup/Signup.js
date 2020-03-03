@@ -3,6 +3,8 @@ import { View, StyleSheet } from 'react-native';
 import { StatusBar } from 'react-native';
 import { Item, Label, Input, H1, Button, H3 } from 'native-base';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import { SIGNUP_API_END_POINT } from '../../utils/constants';
+import Axios from 'axios';
 
 const Signup = (props) => {
 	const [ name, setName ] = useState('');
@@ -13,32 +15,27 @@ const Signup = (props) => {
 	 * Signup user
 	 */
 	const signup = () => {
-		console.log('name', name);
-		console.log('email', email);
-		console.log('password', password);
-
 		const body = {
 			name,
 			email,
 			password
 		};
 
-		console.log(props)
+		console.log('SIGNUP_API_END_POINT', SIGNUP_API_END_POINT)
 
-		props.navigation.navigate('SignupSuccess')
-
-		// fetch('https://api.github.com/gists', {
-		// 	method: 'post',
-		// 	body: JSON.stringify(body)
-		// })
-		// 	.then((response) => response.json())
-		// 	.then(function(data) {
-		// 		console.log(data);
-		// 	});
+		fetch(SIGNUP_API_END_POINT, {
+			method: 'POST',
+			body: JSON.stringify(body),
+			headers: {
+				'Content-type': 'application/json; charset=UTF-8'
+			}
+		})
+			.then((response) => response.json())
+			.then((json) => props.navigation.navigate('SignupSuccess'));
 	};
 
 	return (
-		<View style={styles.container}>
+		<View style={styles.container} data-test="component-signup">
 			<StatusBar barStyle="light-content" hidden={false} backgroundColor="#ffffff" translucent={true} />
 			<View
 				style={{
